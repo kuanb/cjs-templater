@@ -2,65 +2,77 @@
 <html>
 	<title>CJS Template Interface</title>
 
-	<!-- js libraries -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
-
-	<!-- other -->
-	<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+	<style>
+		body {
+			font: 15px arial, sans-serif;
+		}
+		#menu ul {
+			list-style-type: none;
+		}
+		#menu li {
+			padding: 5px;
+		}
+		#menu span {
+			padding: 5px;
+			cursor: pointer;
+		}
+		#menu span:hover {
+			font-weight: 900;
+			background-color: #778899;
+			color: #FFF;
+			box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.5);
+		}
+		.entry .prompt {
+			width: 650px;
+			text-align: right;
+			margin: 10px;
+		}
+		.entry input {
+			width: 300px;
+		}
+	</style>
 
 	<body>
 
 		<div id="menu">
-				Re: 
+			<h4>Hello. What template do you want to use?</h4>
+			<ul>
+				<li onclick="openForm('compliant')">
+					<span>Compliant</span>
+				</li>
+				<li onclick="openForm('noncompliant')">
+					<span>Non-compliant</span>
+				</li>
+				<li onclick="openForm('revocation')">
+					<span>Revocation Request</span>
+				</li>
+			</ul>
+		</div>
 
-Book #: 
-
-BEN 
-
-McADAMS
-
-Date of Arrest: 
-
-Salt Lake County 
-
-Charges: 
-
-ben@slco.org 
-
-LORI BAYS 
-
-Dear Ms. Westover:
-
-Director Human 
-
-The above named defendant was released from the Salt Lake 
-
-County Jail to our supervision.  We have maintained contact with 
-
-the defendant and the Court regarding this case since that time.  
-
-To our knowledge, no complaint has been filed.  On or about , we 
-
-will notify the defendant that supervision by Pretrial Services will 
-
-terminate.  We will also notify the defendant that charges may be 
-
-filed at a later time.  If you prefer this supervision to continue, 
-
-please contact me prior to the termination date.  Should your 
-
-office choose to file this case later, please notify the defendant by 
-
-summons.
-
-Respectfully,
-
-Case Manager
-
-cc: File
+		<div class="entry" id="compliant" style="display:none">
+			<form id="compliant_form" onsubmit="createPDF()">
+				<div class="prompt">Re: <input type="text" name="regarding"></div>
+				<div class="prompt">Book #: <input type="text" name="book_num"></div>
+				<div class="prompt">Date of Arrest: <input type="date" name="arrest_date"></div>
+				<div class="prompt">Charges: <input type="text" name="charges"></div>
+				<div class="prompt">On or About Date: <input type="date" name="on_about_date"></div>
+				<div class="prompt">Counselor: <input type="text" name="counselor"></div>
+				<button type="submit">Create PDF</button>
+			</form>
 		</div>
 
 	</body>
 	<script type="text/javascript">
+		function openForm (id) {
+			var d = document.getElementById(id);
+			var m = document.getElementById("menu");
+
+			if (d) {
+				m.style.display = "none";
+				d.style.display = "";
+			} else {
+				console.log("Failed to find document element id: " + id);
+			}
+		};
 	</script>
 </html>
