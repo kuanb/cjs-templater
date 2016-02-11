@@ -2,6 +2,9 @@
 <html>
 	<title>CJS Template Interface</title>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.20/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.20/vfs_fonts.js"></script>
+
 	<style>
 		body {
 			font: 15px arial, sans-serif;
@@ -22,12 +25,12 @@
 			color: #FFF;
 			box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.5);
 		}
-		.entry .prompt {
+		.entry {
 			width: 650px;
 			text-align: right;
-			margin: 10px;
 		}
 		.entry input {
+			margin: 10px;
 			width: 300px;
 		}
 	</style>
@@ -50,19 +53,56 @@
 		</div>
 
 		<div class="entry" id="compliant" style="display:none">
-			<form id="compliant_form" onsubmit="createPDF()">
-				<div class="prompt">Re: <input type="text" name="regarding"></div>
-				<div class="prompt">Book #: <input type="text" name="book_num"></div>
-				<div class="prompt">Date of Arrest: <input type="date" name="arrest_date"></div>
-				<div class="prompt">Charges: <input type="text" name="charges"></div>
-				<div class="prompt">On or About Date: <input type="date" name="on_about_date"></div>
-				<div class="prompt">Counselor: <input type="text" name="counselor"></div>
+			<form id="compliant_form" onsubmit="return createPDF(this)">
+				Re: <input type="text" name="regarding"><br>
+				Book #: <input type="text" name="book_num"><br>
+				Date of Arrest: <input type="date" name="arrest_date"><br>
+				Charges: <input type="text" name="charges"><br>
+				On or About Date: <input type="date" name="on_about_date"><br>
+				Counselor: <input type="text" name="counselor"><br>
 				<button type="submit">Create PDF</button>
 			</form>
 		</div>
 
 	</body>
 	<script type="text/javascript">
+		function createPDF (form) {
+			try {
+				var out = {};
+				for (var i = 0; i < form.children.length; i++) {
+					var child = form.children[i];
+					if (child.name && child.type !== "file" && child.type != "reset") {
+						if (child.name !== undefined && child.value !== undefined) {
+							out[child.name] = child.value;
+						}
+					}
+				}
+				console.log(out);
+
+				var pdf_struc = {
+					content: [
+						{text: "Example output", style: "header"},
+						{text: "Re: " + out.regarding},
+						{text: "Book #: " + out.book_num},
+						{text: "Date of Arrest: " + out.arrest_date},
+						{text: "Charges: " + out.charges},
+						{text: "On or About Date: " + out.on_about_date},
+						{text: "Counselor: " + out.counselor}
+					],
+					styles: {
+						header: {
+							fontSize: 20,
+							bold: true,
+						}
+					}
+				};
+				pdfMake.createPdf(pdf_struc).download("templateOutuput.pdf");
+			} catch (err) {
+				console.log(err)
+			}
+			return false;
+		};
+
 		function openForm (id) {
 			var d = document.getElementById(id);
 			var m = document.getElementById("menu");
